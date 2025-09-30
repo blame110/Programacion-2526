@@ -1,9 +1,8 @@
 package UNIDAD1;
 
 public class EjemploInicial {
-    
 
-  public static void main(String args[]){
+  public static void main(String args[]) {
 
     /*
      * Las variables son nombres a los cuales podemos asignar datos
@@ -12,33 +11,31 @@ public class EjemploInicial {
      * 
      */
 
-    //Para definir variables ponemos el tipo de dato que va a guardar
-    //Y despues el nombre de la variable que lo definimos nosotros
+    // Para definir variables ponemos el tipo de dato que va a guardar
+    // Y despues el nombre de la variable que lo definimos nosotros
     int edad = 0;
-    int edadInicial= 12;
+    int edadInicial = 12;
     int edadPadres;
 
-    edad = 28;
+    edad = 29;
 
     edad = edadInicial + 20;
-    //Variables de tipo decimal
+    // Variables de tipo decimal
     float peso = 234.3f;
     double pi = 3.149237856;
 
     pi = 23424;
     peso = 45;
 
-    //Cadenas de texto y Caracteres
+    // Cadenas de texto y Caracteres
     String nombre = "Juan Pedro";
     char letraInicial = 'J';
 
-    //Boolean
+    // Boolean
     boolean esPadre = true;
 
-    //Aqui se escribe el codigo del programa
+    // Aqui se escribe el codigo del programa
     System.out.print("Bienvenido al curso 2526 de Programación!!");
-
-    
 
   }
 
