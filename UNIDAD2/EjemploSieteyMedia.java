@@ -46,7 +46,7 @@ public class EjemploSieteyMedia {
         if (sumaJugador <= 7.5F) {
 
             // Sacamos cartas para la banca
-            while (sumaBanca < 5 && sumaBanca < 7.5f) {
+            while (sumaBanca < sumaJugador && sumaBanca < 7.5f) {
                 // Sacamos una carta aleatoria de la baraja.
                 carta = (int) (Math.random() * 10 + 1);
                 // Es media si sale un 8 un 9 o un 10
@@ -71,12 +71,14 @@ public class EjemploSieteyMedia {
             if (sumaJugador <= 7.5f) {
 
                 // Comprobamos si el jugador ha ganado
+                // El jugador gana solo si suma es superior
                 if (sumaJugador > sumaBanca) {
                     System.out.println("Ha ganado el jugador!!");
                     if (sumaJugador == 7.5f) {
                         System.out.println("Felicidades por Sacar 7.5 te pagamos el doble");
                     }
                 } else
+                    // Si han sacado lo mismo o la banca mas, gana la banca
                     System.out.println("Ha ganao la banca");
 
             }
