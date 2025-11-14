@@ -6,6 +6,6 @@ public class tetoco {
     public static void main(String[] args) {
         Random random = new Random();
 
-        System.out.println("Te toco " + random.nextInt(30));
+        System.out.println("Te toco " + random.nextInt(6));
     }
 }

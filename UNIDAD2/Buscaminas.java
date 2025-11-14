@@ -18,6 +18,12 @@ public class Buscaminas {
                 { 0, 0, 0 } };
 
         Scanner teclado = new Scanner(System.in);
+        // Comentario: entrada de dos coordenadas x y (posx, posy). El programa
+        // comprueba primero si en esa posición hay bomba (valor 1). Si no hay,
+        // recorre las casillas alrededor (3x3 centrado en la seleccion) para
+        // contar bombas cercanas usando dos bucles for anidados. Se incluyen
+        // comprobaciones de límites (i>=0 && i<=2 && j>=0 && j<=2) para evitar
+        // IndexOutOfBounds al acceder al array bidimensional.
 
         System.out.println("En que posiciones quieres comprobar (x y)");
         int posx = teclado.nextInt();
