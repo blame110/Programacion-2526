@@ -2,6 +2,20 @@ package UNIDAD1;
 
 import java.util.Scanner;
 
+/*
+ * EjemploOperadoresComparacion.java
+ *
+ * Este programa ilustra el uso de operadores de comparación y lógicos en Java.
+ * Evalúa condiciones para determinar si un niño puede ir delante en un vehículo
+ * y si el personaje Ícaro puede volar o recuperar unas llaves, basándose en múltiples criterios.
+ *
+ * Funcionalidades:
+ * - Solicita la edad y altura de un niño al usuario.
+ * - Utiliza operadores lógicos (`||` - OR) para decidir si el niño puede ir delante.
+ * - Demuestra la precedencia de operadores lógicos (`&&` - AND, `||` - OR) mediante el caso de Ícaro.
+ * - Muestra el uso del operador de negación (`!`).
+ * - Incluye comentarios detallados sobre la lógica de las condiciones.
+ */
 public class EjemploOperadoresComparacion {
 
     public static void main(String[] args) {

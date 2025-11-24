@@ -1,5 +1,18 @@
 package UNIDAD1;
 
+/*
+ * EjemploAleatorios.java
+ *
+ * Este programa demuestra cómo generar números aleatorios en Java utilizando
+ * `Math.random()`. Genera dos edades aleatorias y luego determina el nivel
+ * educativo (ESO o BACHILLERATO) basado en una de las edades.
+ *
+ * Funcionalidades:
+ * - Generación de un número aleatorio entre 1 y 25 para la variable `edad`.
+ * - Generación de un número aleatorio entre 18 y 25 para la variable `edad2`.
+ * - Uso del operador ternario para asignar un nivel educativo.
+ * - Impresión de los valores generados y el nivel educativo en la consola.
+ */
 public class EjemploAleatorios {
     public static void main(String[] args) {
 

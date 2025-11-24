@@ -1,5 +1,18 @@
 package UNIDAD1;
 
+/*
+ * EjemploInicial.java
+ *
+ * Este programa es una introducción básica a la declaración y uso de variables en Java.
+ * Muestra diferentes tipos de datos como enteros (`int`), números decimales (`float`, `double`),
+ * cadenas de texto (`String`), caracteres (`char`) y booleanos (`boolean`).
+ *
+ * Funcionalidades:
+ * - Declaración de variables de tipo `int`, `float`, `double`, `String`, `char` y `boolean`.
+ * - Asignación de valores a las variables.
+ * - Realización de una operación aritmética simple (`edadInicial + 20`).
+ * - Impresión de un mensaje de bienvenida en la consola.
+ */
 public class EjemploInicial {
 
   public static void main(String args[]) {
