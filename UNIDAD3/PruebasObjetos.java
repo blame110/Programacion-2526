@@ -24,7 +24,7 @@ public class PruebasObjetos {
         // Creación de otro objeto Personaje, "maria", utilizando el constructor con
         // argumentos.
         // Se pasan valores específicos para inicializar sus atributos.
-        Personaje maria = new Personaje("Maria", 95, 0, 50, Personaje.CORTA_DISTANCIA);
+        Personaje maria = new Personaje("Maria", 95, 0, 50);
 
         // Acceso a atributos a través de métodos "getter".
         // Demuestra la encapsulación: no se accede directamente a 'nombre', sino a
