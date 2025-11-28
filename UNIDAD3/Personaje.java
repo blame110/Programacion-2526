@@ -9,7 +9,13 @@ public class Personaje {
      * CONSTANTES *
      *****************/
     public static final int MAX_ARMAS = 3;
+    public static final int EXITO = 0;
+    public static final int FRACASO = -1;
+    public static final int ERROR_CARGADO = -1;
 
+    public static final int GUERRERO = 1;
+    public static final int MAGO = 2;
+    public static final int FRANCOTIRADOR = 3;
     /************************
      * VARIABLES MIEMBRO *
      *************************/
@@ -21,6 +27,7 @@ public class Personaje {
     private int vida; // Variable de instancia: cada objeto Personaje tendrá su propia vida
     private int armadura; // Variable de instancia: cada objeto Personaje tendrá su propia armadura
 
+    private int clase;
     // Modificador de acceso 'protected': Permite el acceso a esta variable
     // desde la misma clase, clases del mismo paquete y subclases (herencia).
     protected int creditos; // Variable de instancia
@@ -54,9 +61,20 @@ public class Personaje {
 
     }
 
-    /************************
+    /**********************************************************************************
      * FUNCIONES *
-     *************************/
+     **********************************************************************************/
+    /**
+     * Esta funcion recibe un arma y se la intenta asignar al personaje, los magos
+     * sólo
+     * equipan armas de largo alcance, los francotiradores largo alcance o explosiva
+     * si no lleva armadura
+     * y los guerreros corto alcance y explosiva si tiene mas de 20 puntos de vida.
+     * Sólo puede equipar el arma si no a alcanzado la cantidad de armas máximas
+     * 
+     * @param arma El arma que quiere equiparse
+     * @return exito 1 o fracaso -1 o maxima cantidad -2
+     */
     public int cargarArma(Arma arma) {
         return 0;
     }
@@ -86,6 +104,14 @@ public class Personaje {
 
     public int getCreditos() {
         return this.creditos;
+    }
+
+    public int getArmadura() {
+        return armadura;
+    }
+
+    public void setArmadura(int armadura) {
+        this.armadura = armadura;
     }
 
     // Sobrescritura del método toString() de la clase Object.
