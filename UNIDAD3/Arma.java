@@ -69,10 +69,32 @@ public class Arma {
         this.estaEquipada = estaEquipada;
     }
 
+    private String tipoDescripcion() {
+        switch (this.tipo) {
+            case LARGA_DISTANCIA:
+                return "Larga distancia";
+            case CORTA_DISTANCIA:
+                return "Corta distancia";
+            case MELEE:
+                return "Melee";
+            case EXPLOSIVA:
+                return "Explosiva";
+            default:
+                return "Desconocido";
+        }
+    }
+
     @Override
     public String toString() {
-        // TODO cambiar y mostrar los datos del arma
-        return super.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("Arma {");
+        sb.append("nombre='").append(this.nombre).append('\'');
+        sb.append(", peso=").append(this.peso);
+        sb.append(", tipo=").append(tipoDescripcion()).append(" (" + this.tipo + ")");
+        sb.append(", danio=").append(this.danio);
+        sb.append(", equipada=").append(this.estaEquipada);
+        sb.append("}");
+        return sb.toString();
     }
 
 }

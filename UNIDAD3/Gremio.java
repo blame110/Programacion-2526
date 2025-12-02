@@ -15,8 +15,17 @@ public class Gremio {
         this.nombre = "Gremio one";
         this.reputacion = 0;
         this.lider = null;
-        this.listaQuests = null;
-        this.miembros = null;
+        this.listaQuests = new HashMap<String, String>();
+        this.miembros = new ArrayList<Personaje>();
+
+    }
+
+    public Gremio(String nombre, int reputacion, Personaje lider) {
+        this.nombre = nombre;
+        this.reputacion = reputacion;
+        this.lider = lider;
+        this.listaQuests = new HashMap<String, String>();
+        this.miembros = new ArrayList<Personaje>();
     }
 
     public Gremio(String nombre, int reputacion, Personaje lider, ArrayList<Personaje> miembros) {
@@ -24,6 +33,8 @@ public class Gremio {
         this.reputacion = reputacion;
         this.lider = lider;
         this.miembros = miembros;
+        this.listaQuests = new HashMap<String, String>();
+        this.miembros = new ArrayList<Personaje>();
     }
 
     /**
@@ -82,6 +93,45 @@ public class Gremio {
 
     public void setListaQuests(HashMap<String, String> listaQuests) {
         this.listaQuests = listaQuests;
+    }
+
+    public ArrayList<Personaje> getMiembros() {
+        return miembros;
+    }
+
+    public void setMiembros(ArrayList<Personaje> miembros) {
+        this.miembros = miembros;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Gremio {");
+        sb.append("nombre='").append(this.nombre).append('\'');
+        sb.append(", reputacion=").append(this.reputacion);
+        sb.append(", lider=");
+        sb.append(this.lider == null ? "null" : this.lider.toString());
+
+        sb.append("\nQuests:");
+        if (this.listaQuests == null || this.listaQuests.isEmpty()) {
+            sb.append(" []");
+        } else {
+            for (String key : this.listaQuests.keySet()) {
+                sb.append("\n  - ").append(key).append(": ").append(this.listaQuests.get(key));
+            }
+        }
+
+        sb.append("\nMiembros:");
+        if (this.miembros == null || this.miembros.isEmpty()) {
+            sb.append(" []");
+        } else {
+            for (Personaje p : this.miembros) {
+                sb.append("\n  - ").append(p == null ? "null" : p.toString());
+            }
+        }
+
+        sb.append("\n}");
+        return sb.toString();
     }
 
 }

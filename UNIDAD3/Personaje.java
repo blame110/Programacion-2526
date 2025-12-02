@@ -46,6 +46,7 @@ public class Personaje {
         this.vida = (int) (Math.random() * 100) + 1; // Asigna una vida aleatoria.
         this.armadura = 100;
         this.creditos = 30;
+        this.listaArmas = new ArrayList<Arma>();
     }
 
     // Constructor con argumentos.
@@ -53,11 +54,13 @@ public class Personaje {
     // El ámbito de las variables 'nombre', 'vida', 'armadura', 'creditos'
     // (parámetros)
     // es local a este constructor.
-    public Personaje(String nombre, int vida, int armadura, int creditos) {
+    public Personaje(String nombre, int vida, int armadura, int creditos, int clase) {
         this.nombre = nombre; // Asigna el valor del parámetro 'nombre' al atributo 'nombre' del objeto.
         this.vida = vida;
         this.armadura = armadura;
         this.creditos = creditos;
+        this.clase = clase;
+        this.listaArmas = new ArrayList<Arma>();
 
     }
 
@@ -198,22 +201,42 @@ public class Personaje {
         this.clase = clase;
     }
 
-    // Sobrescritura del método toString() de la clase Object.
-    // Proporciona una representación en cadena del objeto Personaje,
-    // útil para depuración y visualización.
-    @Override // Indica que este método sobrescribe un método de la clase padre.
+    private String claseDescripcion() {
+        switch (this.clase) {
+            case GUERRERO:
+                return "Guerrero";
+            case MAGO:
+                return "Mago";
+            case FRANCOTIRADOR:
+                return "Francotirador";
+            case LADRON:
+                return "Ladrón";
+            default:
+                return "Desconocida";
+        }
+    }
+
+    @Override
     public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Personaje {");
+        sb.append("nombre='").append(this.nombre).append('\'');
+        sb.append(", vida=").append(this.vida);
+        sb.append(", armadura=").append(this.armadura);
+        sb.append(", creditos=").append(this.creditos);
+        sb.append(", clase=").append(claseDescripcion()).append(" (" + this.clase + ")");
 
-        // TODO Auto-generated method stub
-        String salida = "*************************************\n";
-        salida += "Nombre: " + this.nombre + "\n"; // Accede al atributo 'nombre' del objeto actual.
-        salida += " Vida: " + this.vida + "\n";
-        salida += " Armadura: " + this.armadura + "\n";
-        salida += " Creditos: " + this.creditos + "\n";
-        salida += "*************************************";
+        sb.append("\nArmas:");
+        if (this.listaArmas == null || this.listaArmas.isEmpty()) {
+            sb.append(" []");
+        } else {
+            for (Arma a : this.listaArmas) {
+                sb.append("\n  - ").append(a == null ? "null" : a.toString());
+            }
+        }
 
-        return salida; // Devuelve la cadena formateada.
-
+        sb.append("\n}");
+        return sb.toString();
     }
 
     // Método para comparar dos objetos Personaje basándose en su vida.
