@@ -1,6 +1,7 @@
 package UNIDAD3;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 // Declaración de la clase Personaje
 public class Personaje {
@@ -16,6 +17,7 @@ public class Personaje {
     public static final int GUERRERO = 1;
     public static final int MAGO = 2;
     public static final int FRANCOTIRADOR = 3;
+    public static final int LADRON = 4;
     /************************
      * VARIABLES MIEMBRO *
      *************************/
@@ -26,21 +28,19 @@ public class Personaje {
     private String nombre; // Variable de instancia: cada objeto Personaje tendrá su propio nombre
     private int vida; // Variable de instancia: cada objeto Personaje tendrá su propia vida
     private int armadura; // Variable de instancia: cada objeto Personaje tendrá su propia armadura
-
     private int clase;
     // Modificador de acceso 'protected': Permite el acceso a esta variable
     // desde la misma clase, clases del mismo paquete y subclases (herencia).
     protected int creditos; // Variable de instancia
-    // Constructor por defecto o sin argumentos.
-    // Se invoca cuando se crea un objeto sin especificar valores iniciales.
-    // Inicializa los atributos con valores predeterminados.
 
     private ArrayList<Arma> listaArmas;
 
     /************************
      * CONSTRUCTORES *
      *************************/
-
+    // Constructor por defecto o sin argumentos.
+    // Se invoca cuando se crea un objeto sin especificar valores iniciales.
+    // Inicializa los atributos con valores predeterminados.
     public Personaje() {
         this.nombre = "Generado"; // 'this' se refiere a la instancia actual del objeto.
         this.vida = (int) (Math.random() * 100) + 1; // Asigna una vida aleatoria.
@@ -68,15 +68,83 @@ public class Personaje {
      * Esta funcion recibe un arma y se la intenta asignar al personaje, los magos
      * sólo
      * equipan armas de largo alcance, los francotiradores largo alcance o explosiva
-     * si no lleva armadura
+     * si no lleva armadura en caso de explosiva
      * y los guerreros corto alcance y explosiva si tiene mas de 20 puntos de vida.
-     * Sólo puede equipar el arma si no a alcanzado la cantidad de armas máximas
+     * Sólo puede equipar el arma si no ha alcanzado la cantidad de armas máximas
      * 
      * @param arma El arma que quiere equiparse
-     * @return exito 1 o fracaso -1 o maxima cantidad -2
+     * @return exito o fracaso o cargado
+     * @
      */
-    public int cargarArma(Arma arma) {
-        return 0;
+    public int equiparArma(Arma arma) {
+
+        // Comprobamos si el arma es valida para el personaje
+        if ((clase == MAGO && arma.getTipo() == Arma.LARGA_DISTANCIA)
+                || (clase == FRANCOTIRADOR && (arma.getTipo() == Arma.LARGA_DISTANCIA
+                        || (arma.getTipo() == Arma.EXPLOSIVA && this.armadura == 0)))
+                || (clase == GUERRERO && (arma.getTipo() == Arma.CORTA_DISTANCIA
+                        || (arma.getTipo() == Arma.EXPLOSIVA && this.vida > 20)))) {
+            // Si no se pasa de capacidad se equipa
+            if (listaArmas.size() < MAX_ARMAS) {
+                this.listaArmas.add(arma);
+            } else
+                return ERROR_CARGADO;
+        } else
+            return FRACASO;
+
+        return EXITO;
+    }
+
+    /**
+     * Busca el arma entre el arsenal del personaje y si esta en su lista de armas
+     * la eliminar
+     * 
+     * @param arma
+     * @return EXITO Si existe el arma y la ha podido quitar y FRACASO Sino
+     */
+    public int desarmar(Arma arma) {
+
+        if (arma == null || this.listaArmas.isEmpty())
+            return FRACASO;
+
+        // Ejemplo de eliminar elementos de un arrayList con condiciones usando removeIf
+        // listaArmas.removeIf(a -> a.equals(arma));
+
+        // Comprobamos si el arma esta en el array
+        if (listaArmas.contains(arma)) {
+            listaArmas.remove(arma);
+            return EXITO;
+        } else
+            return FRACASO;
+
+    }
+
+    /**
+     * Funcion que devuelve el arma que mas pesa
+     * 
+     * @return El arma que mas pesa o null si no hay armas
+     */
+    public Arma armaMasPesada() {
+        // Creamos un iterator para recorrer las armas
+        // El iterator contiene al arrayList de armas y funciones para recorrerlo
+        Iterator<Arma> it = this.listaArmas.iterator();
+        double maxPeso = Double.MIN_VALUE;
+        Arma armaMax = null;
+
+        // hasNext es true mientras queden elementos por recorrer en la lista
+        while (it.hasNext()) {
+            // next() nos devuelve el elemento de la posicion actual y pasa al siguiente
+            // elemento
+            Arma arma = it.next();
+            if (arma.getPeso() > maxPeso) {
+                maxPeso = arma.getPeso();
+                armaMax = arma;
+            }
+        }
+
+        // Devolvemos el arma con mas peso
+        return armaMax;
+
     }
 
     // Métodos "getter" (accesores) para obtener el valor de los atributos privados.
@@ -112,6 +180,22 @@ public class Personaje {
 
     public void setArmadura(int armadura) {
         this.armadura = armadura;
+    }
+
+    public ArrayList<Arma> getListaArmas() {
+        return listaArmas;
+    }
+
+    public void setListaArmas(ArrayList<Arma> listaArmas) {
+        this.listaArmas = listaArmas;
+    }
+
+    public int getClase() {
+        return clase;
+    }
+
+    public void setClase(int clase) {
+        this.clase = clase;
     }
 
     // Sobrescritura del método toString() de la clase Object.

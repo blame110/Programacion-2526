@@ -11,19 +11,22 @@ public class Arma {
     private double peso;
     private int tipo;
     private int danio;
+    private boolean estaEquipada;
 
     public Arma() {
         this.nombre = "Pistola";
         this.peso = 2;
         this.tipo = this.CORTA_DISTANCIA;
         this.danio = 20;
+        this.estaEquipada = false;
     }
 
-    public Arma(String nombre, double peso, int tipo, int danio) {
+    public Arma(String nombre, double peso, int tipo, int danio, boolean estaEquipada) {
         this.nombre = nombre;
         this.peso = peso;
         this.tipo = tipo;
         this.danio = danio;
+        this.estaEquipada = estaEquipada;
     }
 
     public String getNombre() {
@@ -56,6 +59,14 @@ public class Arma {
 
     public void setDanio(int danio) {
         this.danio = danio;
+    }
+
+    public boolean getEstaEquipada() {
+        return this.estaEquipada;
+    }
+
+    public void setEstaEquipada(boolean estaEquipada) {
+        this.estaEquipada = estaEquipada;
     }
 
     @Override
