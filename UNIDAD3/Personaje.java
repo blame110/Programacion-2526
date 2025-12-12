@@ -173,6 +173,10 @@ public class Personaje {
         nombre = nombreRecibido; // Asigna el valor del parámetro 'nombreRecibido' al atributo 'nombre'.
     }
 
+    public void setCreditos(int creditos) {
+        this.creditos = creditos;
+    }
+
     public int getCreditos() {
         return this.creditos;
     }

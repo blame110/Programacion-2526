@@ -11,12 +11,12 @@ public class PruebaValorant {
         Arma vandal = new Arma("Vandal", 5, Arma.LARGA_DISTANCIA, 100, true);
         Arma granada = new Arma("Granada", 1, Arma.EXPLOSIVA, 200, true);
 
-        Personaje richton = new Personaje("Ritchton", 100, 0, 0, Personaje.FRANCOTIRADOR);
-        Personaje chapper = new Personaje("Chaper", 40, 20, 0, Personaje.FRANCOTIRADOR);
-        Personaje racer = new Personaje("Racer", 100, 0, 0, Personaje.FRANCOTIRADOR);
+        Personaje richton = new Personaje("Ritchton", 100, 0, 23, Personaje.FRANCOTIRADOR);
+        Personaje chapper = new Personaje("Chaper", 40, 20, 12, Personaje.LADRON);
+        Personaje racer = new Personaje("Racer", 100, 0, 200, Personaje.FRANCOTIRADOR);
 
         // Añadimos las armas al personaje con addAll y Arrays.asList
-        chapper.getListaArmas().addAll(Arrays.asList(punial, vandal, granada));
+        chapper.getListaArmas().addAll(Arrays.asList(punial));
         richton.getListaArmas().addAll(Arrays.asList(punial));
         racer.getListaArmas().addAll(Arrays.asList(punial, vandal, granada));
 
@@ -58,6 +58,20 @@ public class PruebaValorant {
             System.out.println("La quest de gallina esta disponible");
         else
             System.out.println("La quest de gallina no esta disponible");
+
+        System.out.println("Los Ladrones mas armados son: " + pescadores.muyArmadosStream(Personaje.LADRON));
+
+        int sumaGremio = pescadores.getMiembros().stream().mapToInt(p -> p.getCreditos()).sum();
+        System.out.println("La suma del dinero de todo el gremio es " + sumaGremio);
+
+        // Subir a todos los personajes del gremio 10 puntos de vidas por hechizo
+        // colectivo
+        pescadores.getMiembros().stream().forEach(p -> p.setCreditos(p.getCreditos() + 10));
+
+        sumaGremio = pescadores.getMiembros().stream().mapToInt(p -> p.getCreditos()).sum();
+        System.out.println("La suma del dinero de todo el gremio después es " + sumaGremio);
+
+        // Funciones interesantes de sorted anymatch sorted
 
     }
 }
