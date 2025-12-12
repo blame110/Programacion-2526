@@ -2,20 +2,21 @@ package UNIDAD3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import UNIDAD3.Quest;
 
 public class Gremio {
 
-    String nombre;
-    int reputacion;
-    Personaje lider;
-    HashMap<String, String> listaQuests;
-    ArrayList<Personaje> miembros;
+    private String nombre;
+    private int reputacion;
+    private Personaje lider;
+    private HashMap<String, Quest> listaQuests;
+    private ArrayList<Personaje> miembros;
 
     public Gremio() {
         this.nombre = "Gremio one";
         this.reputacion = 0;
         this.lider = null;
-        this.listaQuests = new HashMap<String, String>();
+        this.listaQuests = new HashMap<String, Quest>();
         this.miembros = new ArrayList<Personaje>();
 
     }
@@ -24,7 +25,7 @@ public class Gremio {
         this.nombre = nombre;
         this.reputacion = reputacion;
         this.lider = lider;
-        this.listaQuests = new HashMap<String, String>();
+        this.listaQuests = new HashMap<String, Quest>();
         this.miembros = new ArrayList<Personaje>();
     }
 
@@ -33,7 +34,7 @@ public class Gremio {
         this.reputacion = reputacion;
         this.lider = lider;
         this.miembros = miembros;
-        this.listaQuests = new HashMap<String, String>();
+        this.listaQuests = new HashMap<String, Quest>();
         this.miembros = new ArrayList<Personaje>();
     }
 
@@ -75,7 +76,7 @@ public class Gremio {
         return reputacion;
     }
 
-    public HashMap<String, String> getListaQuests() {
+    public HashMap<String, Quest> getListaQuests() {
         return listaQuests;
     }
 
@@ -91,7 +92,7 @@ public class Gremio {
         this.reputacion = reputacion;
     }
 
-    public void setListaQuests(HashMap<String, String> listaQuests) {
+    public void setListaQuests(HashMap<String, Quest> listaQuests) {
         this.listaQuests = listaQuests;
     }
 
