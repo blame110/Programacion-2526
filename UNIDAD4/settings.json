@@ -1,0 +1,33 @@
+{
+    "php.validate.executablePath": "C:/php/php.exe",
+    "php.debug.executablePath": "C:/php/php.exe",
+    "php.executablePath": "C:/php/php.exe",
+    "editor.fontSize": 20,
+    "open-php-html-js-in-browser.selectedBrowser": "Chrome",
+    "open-php-html-js-in-browser.documentRootFolder": "C:\\xampp\\htdocs\\",
+    "open-php-html-js-in-browser.urlToOpen": "http://localhost/",
+    "git.ignoreMissingGitWarning": true,
+    "json.schemas": [],
+    "explorer.confirmDragAndDrop": false,
+    "workbench.editorAssociations": {
+        "*.mkv": "default"
+    },
+    "explorer.confirmDelete": false,
+    "git.openRepositoryInParentFolders": "never",
+    "git.enableSmartCommit": true,
+    "dart.flutterSdkPath": "C:\\PROGRAMACION\\fluttersdk\\flutter",
+    "java.inlayHints.parameterNames.enabled": "none",
+    "editor.formatOnSave": true,
+    "maven.executable.path": "C:\\maven\\bin\\mvn.cmd",
+    "[java]": {
+        "editor.suggest.snippetsPreventQuickSuggestions": false
+    },
+    "java.jdt.ls.java.home": "C:/Program Files/Java/jdk-25",
+    "java.configuration.runtimes": [
+        {
+            "name": "JavaSE-25",
+            "path": "C:/Program Files/Java/jdk-25",
+            "default": true
+        },
+    ]
+}

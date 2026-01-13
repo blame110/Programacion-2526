@@ -4,9 +4,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class EjemploConexionBruto {
     public static void main(String[] args) {
+
+        Dotenv dotenv = Dotenv.load();
+
+        String host = dotenv.get("DB_HOST");
+        String port = dotenv.get("DB_PORT");
+        String dbName = dotenv.get("DB_NAME");
+        String user = dotenv.get("DB_USER");
+        String password = dotenv.get("DB_PASSWORD");
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + dbName;
 
         Connection con = null;
         try {
@@ -14,8 +24,7 @@ public class EjemploConexionBruto {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Nos conectamos a la bd usando los datos necesarios
-            con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/peliculas_marcadiz", "root", "toor");
+            con = DriverManager.getConnection(url, user, password);
 
             // Creamos la consulta sql
             String query = "select * from pelicula";
