@@ -60,10 +60,6 @@ CREATE TABLE IF NOT EXISTS `peliculas_marcadiz`.`actor_has_pelicula` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_actor_has_pelicula_pelicula1_idx` ON `peliculas_marcadiz`.`actor_has_pelicula` (`pelicula_id` ASC) VISIBLE;
-
-CREATE INDEX `fk_actor_has_pelicula_actor_idx` ON `peliculas_marcadiz`.`actor_has_pelicula` (`actor_id` ASC) VISIBLE;
-
 
 -- -----------------------------------------------------
 -- Table `peliculas_marcadiz`.`cine`
@@ -96,11 +92,6 @@ CREATE TABLE IF NOT EXISTS `peliculas_marcadiz`.`pelicula_has_cine` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-CREATE INDEX `fk_pelicula_has_cine_cine1_idx` ON `peliculas_marcadiz`.`pelicula_has_cine` (`cine_id` ASC) VISIBLE;
-
-CREATE INDEX `fk_pelicula_has_cine_pelicula1_idx` ON `peliculas_marcadiz`.`pelicula_has_cine` (`pelicula_id` ASC) VISIBLE;
-
-
 -- -----------------------------------------------------
 -- Table `peliculas_marcadiz`.`sala`
 -- -----------------------------------------------------
@@ -117,9 +108,6 @@ CREATE TABLE IF NOT EXISTS `peliculas_marcadiz`.`sala` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
-CREATE INDEX `fk_sala_cine1_idx` ON `peliculas_marcadiz`.`sala` (`cine_id` ASC) VISIBLE;
-
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
