@@ -54,6 +54,10 @@ public class Gremio {
      * @return null si no hay o una lista de personajes
      */
     public ArrayList<Personaje> muyArmados(int clase) {
+
+        if (this.miembros == null || this.miembros.isEmpty())
+            return null;
+
         ArrayList<Personaje> listaArmados = new ArrayList<Personaje>();
 
         for (Personaje personaje : miembros) {

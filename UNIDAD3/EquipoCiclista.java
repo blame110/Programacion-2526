@@ -16,6 +16,7 @@ public class EquipoCiclista {
      * VARIABLES MIEMBRO
      ******************************************************************/
 
+    public int puntuacion;
     private String id;
     private String nombre;
     private int numCiclistas;

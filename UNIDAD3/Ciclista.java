@@ -30,9 +30,9 @@ public class Ciclista {
      * VARIABLES MIEMBRO
      ******************************************************************/
 
-    public final int ESP_MONTANA = 1;
-    public final int ESP_CONTRARELOJ = 2;
-    public final int ESP_TODOTERRENO = 0;
+    public final static int ESP_MONTANA = 1;
+    public final static int ESP_CONTRARELOJ = 2;
+    public final static int ESP_TODOTERRENO = 0;
 
     private int id;
     private String nombre;
