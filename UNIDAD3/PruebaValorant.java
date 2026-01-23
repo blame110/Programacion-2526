@@ -24,6 +24,10 @@ public class PruebaValorant {
 
         Quest gallinas = new Quest("100 rupias", "Gallinas Perdidas", "Busca las gallinas", LocalDate.now(),
                 Quest.FACIL);
+
+        Quest gallina2 = gallinas;
+
+        gallina2.setNombre("gallina2");
         Quest CaracolGigante = new Quest("1000 rupias y la mano del hijo del rey", "El Calabozo del Caracol Gigante",
                 "Desde tiempos inmemoriales el calabozo del caracol gigante jamas ha sido completado, nadie ha pasado del nivel 3, seras capaz de conseguir la concha magica del caracol",
                 LocalDate.now(), Quest.MUELTO);
@@ -72,6 +76,9 @@ public class PruebaValorant {
         System.out.println("La suma del dinero de todo el gremio después es " + sumaGremio);
 
         // Funciones interesantes de sorted anymatch sorted
+
+        System.out.println("Gallina original " + gallinas);
+        System.out.println("Gallina v2 " + gallina2);
 
     }
 }
