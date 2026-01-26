@@ -16,11 +16,12 @@ public class EjemploConexionBrutov2 {
         PeliculasDAO BDPeliculas = new PeliculasDAO();
 
         // Sacamos todas las peliculas de BD
-        ResultSet rs = BDPeliculas.getPeliculas();
+        ResultSet rs = BDPeliculas.getPeliculas(5, 20, "duracion", Db.ORDEN_DESC);
 
         try {
             // Recorremos el resultset y mostramos los datos
             while (rs.next()) {
+                System.out.println("id:" + rs.getInt("id"));
                 System.out.println("titulo:" + rs.getString("titulo"));
                 System.out.println("duracion:" + rs.getString("duracion"));
                 System.out.println("clasificacion:" + rs.getInt("clasificacion"));
@@ -33,4 +34,5 @@ public class EjemploConexionBrutov2 {
         }
 
     }
+
 }
