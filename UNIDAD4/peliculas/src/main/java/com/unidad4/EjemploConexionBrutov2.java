@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.HashMap;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 import com.unidad4.model.PeliculasDAO;
@@ -28,6 +30,40 @@ public class EjemploConexionBrutov2 {
                 System.out.println("sinopsis:" + rs.getString("sinopsis"));
                 System.out.println("-----------------------------------\n");
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        rs = BDPeliculas.getPeliculasClasificación(Db.CLASIF_MENORES);
+
+        try {
+
+            int cantidad = BDPeliculas.crearPelicula("Spiderman spiderverse", 1, 140, "Rayada total de dimensiones");
+
+            HashMap<String, String> listaCampos = new HashMap<>();
+
+            listaCampos.put("titulo", "Estela en la luna");
+            listaCampos.put("duracion", "127");
+            listaCampos.put("sinopsis", "Estela se va a la luna");
+
+            // Recorremos el resultset y mostramos los datos
+
+            while (rs.next()) {
+                System.out.println("id:" + rs.getInt("id"));
+                System.out.println("titulo:" + rs.getString("titulo"));
+                System.out.println("duracion:" + rs.getString("duracion"));
+                System.out.println("clasificacion:" + rs.getInt("clasificacion"));
+                System.out.println("sinopsis:" + rs.getString("sinopsis"));
+                System.out.println("-----------------------------------\n");
+            }
+
+            cantidad = BDPeliculas.modificarPelicula(17, listaCampos);
+
+            cantidad = BDPeliculas.eliminarPeliculas(15);
+
+            if (cantidad == 1)
+                System.out.println("Se borro bien la peli");
 
         } catch (Exception e) {
             e.printStackTrace();
