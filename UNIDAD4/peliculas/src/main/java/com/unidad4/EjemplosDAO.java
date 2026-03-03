@@ -6,9 +6,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.unidad4.model.ActorDAO;
+import com.unidad4.model.CineDAO;
+import com.unidad4.model.CineDO;
 
 public class EjemplosDAO {
     public static void main(String[] args) {
+
+        CineDO arteSiete = new CineDO();
+
+        arteSiete.setId(8);
+
+        CineDAO cineDB = new CineDAO();
 
         ActorDAO actordb = new ActorDAO();
 
@@ -43,6 +51,8 @@ public class EjemplosDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        System.out.println(cineDB.cineMasLocalidades(500));
 
     }
 }

@@ -3,6 +3,7 @@ package com.unidad4.model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,25 +21,23 @@ public class PeliculasDAO {
 
     public ResultSet getPeliculas() {
 
-        ResultSet rs = null;
+        String query = "select * from pelicula";
+        /*
+         * Forma correcta de gestionar los recursos de conexion a bd
+         * Metiendo en la declaración del try los objetos que queremos que java gestione
+         * automaticamente
+         */
+        try (Statement stmt = this.con.createStatement();
+                ResultSet rs = stmt.executeQuery(query);) {
 
-        try {
-            // Creamos la consulta sql
-            String query = "select * from pelicula";
+            return rs;
 
-            // Creamos la sentencia
-            Statement stmt = this.con.createStatement();
-
-            // Ejecutamos y guardamos los datos en un resultset
-            rs = stmt.executeQuery(query);
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println("Hubo un problema con la BD");
             e.printStackTrace();
         }
 
-        return rs;
-
+        return null;
     }
 
     public ResultSet getPeliculasClasificación(int clasificacion) {
