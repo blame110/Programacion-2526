@@ -53,7 +53,6 @@ public class CineDAO {
 
                 // Añadimos el cineDO al arrayList
                 listaCines.add(cine);
-
             }
 
         } catch (SQLException sq) {
