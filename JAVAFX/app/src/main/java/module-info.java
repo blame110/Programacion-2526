@@ -1,4 +1,6 @@
-module com.daw.javafx {
+module com.daw {
     requires javafx.controls;
-    exports com.daw.javafx;
+    requires javafx.graphics;
+
+    exports com.daw;
 }
