@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import com.daw.model.PeliculasDAO;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -73,7 +74,23 @@ public class PeliculaPanel extends GridPane {
         });
 
         btnGuardar.setOnAction(e -> {
-            guardar();
+            int resultado = guardar();
+
+            // si resultado vale -1 mostramos un mensaje de error
+            if (resultado == -1) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error En la Operacion");
+                alert.setHeaderText(null); // sin cabecera
+                alert.setContentText("El registro no se ha guardado correctamente.");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Operacion completada");
+                alert.setHeaderText(null); // sin cabecera
+                alert.setContentText("La pelicula se ha guardado correctamente.");
+                alert.showAndWait();
+            }
+
         });
 
     }
