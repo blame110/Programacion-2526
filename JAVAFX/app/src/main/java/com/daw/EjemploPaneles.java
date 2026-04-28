@@ -1,5 +1,6 @@
 package com.daw;
 
+import com.daw.panels.FicherosPanel;
 import com.daw.panels.PeliculaPanel;
 
 import javafx.application.Application;
@@ -39,6 +40,7 @@ public class EjemploPaneles extends Application {
 
         BorderPane pPrincipal = new BorderPane();
         PeliculaPanel pPelicula = new PeliculaPanel();
+        FicherosPanel pFicheros = new FicherosPanel();
         TabPane tPane = new TabPane();
 
         Tab tPelicula = new Tab("Crear Pelicula");
@@ -51,6 +53,7 @@ public class EjemploPaneles extends Application {
 
         // Metemos el panelPelicula en la primera pestaña
         tPelicula.setContent(pPelicula);
+        tFicheros.setContent(pFicheros);
 
         /***********************
          * MENUS
