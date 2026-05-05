@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,9 @@ public class PeliculasDAO implements AutoCloseable {
         this.con = Db.conectar();
     }
 
-    public ResultSet getPeliculas() {
+    public ArrayList<PeliculaCombo> getListaPeliculas() {
+
+        ArrayList<PeliculaCombo> listaPeliculas = new ArrayList<PeliculaCombo>();
 
         String query = "select * from pelicula";
         /*
@@ -30,14 +33,23 @@ public class PeliculasDAO implements AutoCloseable {
         try (Statement stmt = this.con.createStatement();
                 ResultSet rs = stmt.executeQuery(query);) {
 
-            return rs;
+            // Recorremos el resultset
+            while (rs.next()) {
+                // para cada registro cogemos el id y el titulo
+                // Y con ellos cargamos nuestro objeto peliculacombo
+                PeliculaCombo peliCmb = new PeliculaCombo();
+                peliCmb.setId(rs.getInt("id"));
+                peliCmb.setTitulo(rs.getString("titulo"));
+                // Añadimos la pelicula combo al arraylist
+                listaPeliculas.add(peliCmb);
+            }
 
         } catch (SQLException e) {
             System.out.println("Hubo un problema con la BD");
             e.printStackTrace();
         }
 
-        return null;
+        return listaPeliculas;
     }
 
     public ResultSet getPeliculasClasificación(int clasificacion) {

@@ -2,6 +2,7 @@ package com.daw;
 
 import com.daw.panels.FicherosPanel;
 import com.daw.panels.PeliculaPanel;
+import com.daw.ventanas.VentanaBorrar;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -30,6 +31,8 @@ import javafx.stage.Stage;
  */
 public class EjemploPaneles extends Application {
 
+    private VentanaBorrar vBorrar;
+
     @Override
     public void start(Stage stage) {
 
@@ -41,6 +44,7 @@ public class EjemploPaneles extends Application {
         BorderPane pPrincipal = new BorderPane();
         PeliculaPanel pPelicula = new PeliculaPanel();
         FicherosPanel pFicheros = new FicherosPanel();
+
         TabPane tPane = new TabPane();
 
         Tab tPelicula = new Tab("Crear Pelicula");
@@ -91,6 +95,14 @@ public class EjemploPaneles extends Application {
             // Seleccionamos la pestaña primer del panel
             // Que es la de insertar pelicula
             tPane.getSelectionModel().select(tPelicula);
+        });
+
+        // Cuando pulsamos en borrar se abre la ventana de borrar peliculas
+        miBorrarPelicula.setOnAction(e -> {
+
+            vBorrar = new VentanaBorrar(stage);
+            vBorrar.show();
+
         });
 
         // Ponemos en la posicion central del borderpane
