@@ -1,5 +1,6 @@
 package com.daw;
 
+import com.daw.panels.BotPanel;
 import com.daw.panels.FicherosPanel;
 import com.daw.panels.PeliculaPanel;
 import com.daw.ventanas.VentanaBorrar;
@@ -44,6 +45,7 @@ public class EjemploPaneles extends Application {
         BorderPane pPrincipal = new BorderPane();
         PeliculaPanel pPelicula = new PeliculaPanel();
         FicherosPanel pFicheros = new FicherosPanel();
+        BotPanel pJardinero = new BotPanel();
 
         TabPane tPane = new TabPane();
 
@@ -53,6 +55,7 @@ public class EjemploPaneles extends Application {
 
         tPelicula.setClosable(false);
         tFicheros.setClosable(false);
+        tBot.setContent(pJardinero);
         tPane.getTabs().addAll(tPelicula, tFicheros, tBot);
 
         // Metemos el panelPelicula en la primera pestaña
