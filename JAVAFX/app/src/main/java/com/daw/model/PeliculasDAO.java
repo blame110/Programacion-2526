@@ -6,41 +6,43 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.daw.utils.Db;
 
 public class PeliculasDAO implements AutoCloseable {
 
+    // Whitelist de columnas permitidas para ORDER BY y UPDATE.
+    // Esto evita SQL Injection en la cláusula "order by" al rechazar
+    // cualquier nombre de columna que no esté en esta lista
+    private static final Set<String> COLUMNAS_VALIDAS = new HashSet<>(Arrays.asList(
+            "id", "titulo", "clasificacion", "duracion", "sinopsis"));
+
     private Connection con;
 
+    // Al crear el DAO obtenemos una conexión a la BD
     public PeliculasDAO() {
-        // Cuando creamos el objeto nos conectamos a la bd
         this.con = Db.conectar();
     }
 
+    // Devuelve la lista completa de películas como objetos PeliculaCombo
+    // Solo recupera id y titulo (lo justo para rellenar ComboBoxes),
+    // no toda la fila, para ser más eficiente
     public ArrayList<PeliculaCombo> getListaPeliculas() {
+        ArrayList<PeliculaCombo> listaPeliculas = new ArrayList<>();
+        String query = "select id, titulo from pelicula";
 
-        ArrayList<PeliculaCombo> listaPeliculas = new ArrayList<PeliculaCombo>();
-
-        String query = "select * from pelicula";
-        /*
-         * Forma correcta de gestionar los recursos de conexion a bd
-         * Metiendo en la declaración del try los objetos que queremos que java gestione
-         * automaticamente
-         */
         try (Statement stmt = this.con.createStatement();
-                ResultSet rs = stmt.executeQuery(query);) {
+                ResultSet rs = stmt.executeQuery(query)) {
 
-            // Recorremos el resultset
             while (rs.next()) {
-                // para cada registro cogemos el id y el titulo
-                // Y con ellos cargamos nuestro objeto peliculacombo
                 PeliculaCombo peliCmb = new PeliculaCombo();
                 peliCmb.setId(rs.getInt("id"));
                 peliCmb.setTitulo(rs.getString("titulo"));
-                // Añadimos la pelicula combo al arraylist
                 listaPeliculas.add(peliCmb);
             }
 
@@ -52,121 +54,99 @@ public class PeliculasDAO implements AutoCloseable {
         return listaPeliculas;
     }
 
-    public ResultSet getPeliculasClasificación(int clasificacion) {
-        ResultSet rs = null;
+    // Filtra películas por clasificación usando PreparedStatement
+    // para evitar SQL Injection. El ResultSet queda abierto para que
+    // el llamador lo procese y lo cierre
+    public ResultSet getPeliculasClasificacion(int clasificacion) {
+        String query = "select * from pelicula where clasificacion = ?";
 
         try {
-            // Creamos la consulta sql ponemos interrogaciones ? en los sitios donde vamos
-            // a introducir datos externos de variables
-            String query = "select * from pelicula where clasificacion = ?";
-
-            // Creamos la sentencia
             PreparedStatement stmt = this.con.prepareStatement(query);
-
             stmt.setInt(1, clasificacion);
-
-            // Ejecutamos y guardamos los datos en un resultset
-            rs = stmt.executeQuery();
-
+            return stmt.executeQuery();
         } catch (Exception e) {
             System.out.println("Hubo un problema con la BD");
             e.printStackTrace();
+            return null;
         }
-
-        return rs;
-
     }
 
-    /**
-     * Devuelve numelementos de la pagina selecionada que recibe o null si no hay
-     * elementos
-     * 
-     * @param pagina
-     * @param numElementos
-     * @return
-     */
+    // Paginación con ordenación dinámica.
+    // El offset se calcula como (pagina - 1) * numElementos.
+    // El nombre de columna para ORDER BY se valida contra COLUMNAS_VALIDAS
+    // para evitar SQL Injection. Los parámetros limit/offset se pasan
+    // como valores parametrizados (?)
     public ResultSet getPeliculas(int pagina, int numElementos, String orden, int sentidoOrden) {
+        int offset = (pagina - 1) * numElementos;
+        String query = "select * from pelicula";
 
-        ResultSet rs = null;
+        if (orden != null && COLUMNAS_VALIDAS.contains(orden)) {
+            query += " order by " + orden;
+            if (sentidoOrden == Db.ORDEN_DESC) {
+                query += " desc";
+            }
+        }
+
+        query += " limit ? offset ?";
 
         try {
-            // El offset es el registro a partir del cual vamos a mostrar elementos
-            // si recibo pagina y numElementos la formula seria
-            // (pagina-1)*numelementos, asi, la pagina 4 que deberia de mostrar desde el 31
-            // al 40
-            // seria (4-1)*10=30 y el primer elemento que mostraria seria el 31
-            int offset = (pagina - 1) * numElementos;
-
-            // Creamos la consulta sql
-            String query = "select * from pelicula";
-
-            // Si tenemos campo a ordenar
-            if (orden != null) {
-                query += " order by " + orden;
-                if (sentidoOrden == Db.ORDEN_DESC)
-                    query += " desc ";
-            }
-
-            // Al final añadimos la paginacion
-            query += " limit " + numElementos + " offset " + offset;
-
-            System.out.println(query);
-
-            // Creamos la sentencia
-            Statement stmt = this.con.createStatement();
-
-            // Ejecutamos y guardamos los datos en un resultset
-            rs = stmt.executeQuery(query);
-
-        } catch (
-
-        Exception e) {
+            PreparedStatement stmt = this.con.prepareStatement(query);
+            stmt.setInt(1, numElementos);
+            stmt.setInt(2, offset);
+            return stmt.executeQuery();
+        } catch (Exception e) {
             System.out.println("Hubo un problema con la BD");
             e.printStackTrace();
+            return null;
         }
-
-        return rs;
-
     }
 
+    // Actualiza dinámicamente los campos que se pasan en el HashMap.
+    // Construye la query "UPDATE pelicula SET col1=?, col2=? WHERE id=?"
+    // de forma dinámica. Solo acepta nombres de columna de COLUMNAS_VALIDAS.
+    // Las columnas "titulo" y "sinopsis" se tratan como String;
+    // el resto como int
     public int modificarPelicula(int id, HashMap<String, String> campos) {
-
         int columnasModificadas = -1;
 
         try {
-            String query = "update pelicula set ";
-
+            StringBuilder query = new StringBuilder("update pelicula set ");
             boolean primerCampo = true;
+
             for (Map.Entry<String, String> campo : campos.entrySet()) {
-                // Si es el primer campo no pongo coma y marco que ya no va a ser el primer
-                // Campo para el siguiente campo
+                if (!COLUMNAS_VALIDAS.contains(campo.getKey())) {
+                    continue;
+                }
                 if (primerCampo) {
                     primerCampo = false;
                 } else {
-                    query += ",";
+                    query.append(",");
                 }
-
-                query += campo.getKey() + "=?";
+                query.append(campo.getKey()).append("=?");
             }
 
-            query += " where id = ?";
-            PreparedStatement stmt = con.prepareStatement(query);
-
-            int posicion = 1;
-            for (Map.Entry<String, String> campo : campos.entrySet()) {
-
-                if (campo.getKey().equals("titulo") || campo.getKey().equals("sinopsis"))
-                    stmt.setString(posicion, campo.getValue());
-                else
-                    stmt.setInt(posicion, Integer.valueOf(campo.getValue()));
-
-                posicion++;
+            if (primerCampo) {
+                return -1;
             }
 
-            System.out.println(query);
-            stmt.setInt(posicion, id);
+            query.append(" where id = ?");
 
-            columnasModificadas = stmt.executeUpdate();
+            try (PreparedStatement stmt = con.prepareStatement(query.toString())) {
+                int posicion = 1;
+                for (Map.Entry<String, String> campo : campos.entrySet()) {
+                    if (!COLUMNAS_VALIDAS.contains(campo.getKey())) {
+                        continue;
+                    }
+                    if (campo.getKey().equals("titulo") || campo.getKey().equals("sinopsis")) {
+                        stmt.setString(posicion, campo.getValue());
+                    } else {
+                        stmt.setInt(posicion, Integer.parseInt(campo.getValue()));
+                    }
+                    posicion++;
+                }
+                stmt.setInt(posicion, id);
+                columnasModificadas = stmt.executeUpdate();
+            }
 
         } catch (Exception e) {
             System.out.println("Hubo un problema con la BD");
@@ -174,25 +154,20 @@ public class PeliculasDAO implements AutoCloseable {
         }
 
         return columnasModificadas;
-
     }
 
+    // Inserta una nueva película con los datos pasados.
+    // Usa PreparedStatement con parámetros para evitar SQL Injection
     public int crearPelicula(String titulo, int clasificacion, int duracion, String sinopsis) {
-
         int columnasModificadas = -1;
-        try {
-            String query = "insert into pelicula (titulo,clasificacion,duracion,sinopsis) values (?, ?, ?, ?)";
+        String query = "insert into pelicula (titulo,clasificacion,duracion,sinopsis) values (?, ?, ?, ?)";
 
-            PreparedStatement stmt = con.prepareStatement(query);
-
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setString(1, titulo);
             stmt.setInt(2, clasificacion);
             stmt.setInt(3, duracion);
             stmt.setString(4, sinopsis);
-
-            // Ejecutamos y guardamos los datos en un resultset
             columnasModificadas = stmt.executeUpdate();
-
         } catch (Exception e) {
             System.out.println("Hubo un problema con la BD");
             e.printStackTrace();
@@ -200,22 +175,14 @@ public class PeliculasDAO implements AutoCloseable {
         return columnasModificadas;
     }
 
-    // delete from pelicula where id=?
-    /**
-     * Funcion que recibe un id de pelicula y borra el registro
-     * 
-     * @param id
-     * @return 1 si pudo borrarla o -1 sino
-     */
+    // Borra una película por su id
     public int eliminarPeliculas(int id) {
         int columnasBorradas = -1;
-        try {
-            String query = "delete from pelicula where id=?";
-            PreparedStatement stmt = con.prepareStatement(query);
+        String query = "delete from pelicula where id=?";
 
+        try (PreparedStatement stmt = con.prepareStatement(query)) {
             stmt.setInt(1, id);
             columnasBorradas = stmt.executeUpdate();
-
         } catch (Exception e) {
             System.out.println("hubo un problema al borrar la id " + id);
             e.printStackTrace();
@@ -224,10 +191,12 @@ public class PeliculasDAO implements AutoCloseable {
         return columnasBorradas;
     }
 
+    // Al cerrar el DAO se cierra la conexión si sigue abierta
     @Override
-    public void close() throws Exception {
-        // TODO Auto-generated method stub
-        this.con.close();
+    public void close() throws SQLException {
+        if (this.con != null && !this.con.isClosed()) {
+            this.con.close();
+        }
     }
 
 }

@@ -1,7 +1,5 @@
 package com.daw.ventanas;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.daw.model.PeliculaCombo;
@@ -9,67 +7,95 @@ import com.daw.model.PeliculasDAO;
 
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+// Ventana modal para borrar películas de la base de datos.
+// Muestra un ComboBox con todas las películas y un botón para eliminar
 public class VentanaBorrar extends Stage {
 
     private ComboBox<PeliculaCombo> cmbPeliculas;
 
     public VentanaBorrar(Stage stage) {
-        // Creamos un VBox para añadir los elementos
         VBox pVertical = new VBox();
-        // Añadimos al VBox la lista y el boton de borrar
-        cmbPeliculas = new ComboBox<PeliculaCombo>();
-        // Cargamos las peliculas de BD en el comboBox
+        cmbPeliculas = new ComboBox<>();
         this.cargarPeliculas();
         pVertical.getChildren().add(cmbPeliculas);
         Button btnBorrar = new Button("Borrar Pelicula");
-        // Al pulsar el boton de llama a la función
-        // Para borrarla desde bd
-        btnBorrar.setOnAction(e -> {
-            this.eliminarPelicula();
-        });
+        btnBorrar.setOnAction(e -> this.eliminarPelicula());
         pVertical.getChildren().add(btnBorrar);
-        // Creamos la scene con el vbox con la lista y el boton
+
         Scene scene = new Scene(pVertical, 600, 400);
-        // Esta misma clase es el stage, le asignamos la scene con el vbox
         this.setScene(scene);
-        // Ponemos de modalidad de apertura window_modal para bloquear a la padre
+        // Hacemos la ventana modal: bloquea la ventana padre mientras está abierta
         this.initModality(Modality.WINDOW_MODAL);
         this.initOwner(stage);
-
     }
 
+    // Carga la lista de películas desde la BD y la asigna al ComboBox.
+    // Selecciona automáticamente el primer elemento si hay datos
     private void cargarPeliculas() {
-        // Vaciamos el combobox
         cmbPeliculas.getItems().clear();
-        // Creamos el objeto peliculasDAO para sacar las peliculas
-        // y cargamos de BD
-        try (PeliculasDAO pDao = new PeliculasDAO();) {
-
+        try (PeliculasDAO pDao = new PeliculasDAO()) {
             ArrayList<PeliculaCombo> listaPeliculas = pDao.getListaPeliculas();
-            // Asignamos la lista de peliculas combo al combobox
-            // Convirtientiendolas a Observablelist
             cmbPeliculas.setItems(FXCollections.observableList(listaPeliculas));
-
+            if (!listaPeliculas.isEmpty()) {
+                cmbPeliculas.getSelectionModel().selectFirst();
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error de BD");
+            alert.setHeaderText(null);
+            alert.setContentText("No se pudieron cargar las películas.");
+            alert.showAndWait();
         }
     }
 
+    // Elimina la película seleccionada:
+    // 1. Valida que haya una selección
+    // 2. Pide confirmación al usuario
+    // 3. Borra de BD y recarga la lista
+    // 4. Muestra mensaje de éxito o error
     private void eliminarPelicula() {
-        // Saco el id del peliculaCombo selecionado en el combobox
-        int idEliminar = cmbPeliculas.getValue().getId();
+        PeliculaCombo seleccionada = cmbPeliculas.getValue();
+        if (seleccionada == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Sin selección");
+            alert.setHeaderText(null);
+            alert.setContentText("Selecciona una película para borrar.");
+            alert.showAndWait();
+            return;
+        }
+
+        // Diálogo de confirmación antes de borrar
+        Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmacion.setTitle("Confirmar borrado");
+        confirmacion.setHeaderText(null);
+        confirmacion.setContentText("¿Estás seguro de que quieres borrar \"" + seleccionada.getTitulo() + "\"?");
+        if (confirmacion.showAndWait().orElse(ButtonType.CANCEL) != ButtonType.OK) {
+            return;
+        }
+
         try (PeliculasDAO pDao = new PeliculasDAO()) {
-            pDao.eliminarPeliculas(idEliminar);
+            pDao.eliminarPeliculas(seleccionada.getId());
             this.cargarPeliculas();
 
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Operación completada");
+            alert.setHeaderText(null);
+            alert.setContentText("Película borrada correctamente.");
+            alert.showAndWait();
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error al borrar");
+            alert.setHeaderText(null);
+            alert.setContentText("No se pudo borrar la película.");
+            alert.showAndWait();
         }
     }
 

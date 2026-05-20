@@ -1,0 +1,8 @@
+.env
+target/
+*.class
+*.jar
+*.log
+.settings/
+.classpath
+.project

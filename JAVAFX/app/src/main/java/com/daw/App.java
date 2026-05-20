@@ -48,13 +48,15 @@ public class App extends Application {
         /***** EVENTOS *********/
         btnNombre.setOnAction(e -> {
             lblMensaje.setText("Bienvenido a tu primera App, " + txtNombre.getText());
-            vPanel.getChildren().add(lblMensaje);
+            // Solo añadimos el label si no está ya en el panel para evitar duplicados
+            if (!vPanel.getChildren().contains(lblMensaje)) {
+                vPanel.getChildren().add(lblMensaje);
+            }
         });
-        // Ponemos un evento sobre el slider
-        // Para que cuando se arrastre su valor se refleje
-        // en una label
-        sldPuntuacion.setOnMouseDragged(e -> {
-            lblSlider.setText("Valor: " + (int) sldPuntuacion.getValue());
+        // Escuchamos cambios en el slider mediante la propiedad value,
+        // que captura tanto arrastre del ratón como cambios por teclado
+        sldPuntuacion.valueProperty().addListener((obs, oldVal, newVal) -> {
+            lblSlider.setText("Valor: " + newVal.intValue());
         });
 
         vPanel.getChildren().addAll(lblNombre, txtNombre, btnNombre);
