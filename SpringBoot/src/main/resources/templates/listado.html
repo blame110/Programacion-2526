@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+
+<body>
+    <table class="table">
+        <thead>
+            <tr class="table-success">
+                <th scope="col">#</th>
+                <th scope="col">Marca</th>
+                <th scope="col">Modelo</th>
+                <th scope="col">Año</th>
+                <th scope="col">Potencia</th>
+                <th scope="col">#</th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr th:each="Coche: ${listacoches}" class="table-primary">
+                <th scope="row">3</th>
+                <td th:text="${Coche.marca}"></td>
+                <td th:text="${Coche.modelo}"></td>
+                <td th:text="${Coche.anio}"></td>
+                <td th:text="${Coche.potencia}"></td>
+                <td><button type="button" class="btn btn-danger">Borrar</button></td>
+            </tr>
+
+        </tbody>
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
